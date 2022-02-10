@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="./js/jquery-3.5.1.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .wrap {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: linear-gradient(to right top, #c4fcef, #9dfdd4, #8bfbaa, #91f570, #a8eb12);
+    }
+
+    .form {
+        width: 600px;
+        height: 400px;
+        display: flex;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 25px 45px;
+    }
+
+    .left img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .right {
+        width: 250px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .right-con {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+    }
+    .text {
+        width: 100%;
+        outline: none;
+        border: none;
+        border-bottom: 3px solid #a1fdd7;
+        color: #fff;
+        background: rgba(0, 0, 0, 0);
+        font-size: 16px;
+        padding: 3px;
+    }
+
+    .btn {
+        width: 100%;
+        height: 30px;
+        border-radius: 20px;
+        border: none;
+        color: #fff;
+        background-image: linear-gradient(120deg, #92fbba 0%, #ffffff 100%);
+        margin-top: 30px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        color: #fff;
+        font-size: 15px;
+        cursor: pointer;
+        margin: 10px auto;
+        text-decoration: underline;
+    }
+
+    label:hover {
+        color: black;
+    }
+
+    #form_register {
+        display: none;
+    }
+
+    #modeCheckBox {
+        display: none;
+    }
+
+    #to_register::after{
+        content: '没有账号，去注册';
+    }
+
+    #modeCheckBox:checked+.right-con #form_login{
+        display:none;
+    }
+    #modeCheckBox:checked+.right-con #form_register{
+        display:block;
+    }
+
+    #modeCheckBox:checked+.right-con #to_register::after {
+        content: '已有账号，去登陆';
+    }
+</style>
+
+<body>
+    <!--action="http://127.0.0.1:8888/process_post" method="post" -->
+    <div class="wrap">
+        <div class="form">
+            <div class="left">
+                <img src="img/Tech Life - Communication.png">
+                </video>
+            </div>
+            <div class="right">
+                <input id="modeCheckBox" type="checkbox" />
+                <div class="right-con">
+                    <form id="form_login">
+                        <h1>NEW HERE SIGN IN</h1>
+                        <h3>NAME</h3>
+                        <input class='text' type='text' name='username'>
+                        <h3>PASSWORD</h3>
+                        <input class='text' type='password' name='password'>
+                        <input type='submit' class='btn' value="LOGIN">
+                    </form>
+                    <form id="form_register">
+                        <h1>NEW HERE SIGN UP</h1>
+                        <h3>NAME</h3>
+                        <input class='text' type='text' name='username'>
+                        <h3>PASSWORD</h3>
+                        <input class='text' type='password' name='password'>
+                        <input type='submit' class='btn' value="REGISTER">
+                    </form>
+                    <label id='to_register' for="modeCheckBox"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            // 监听登录表单的提交事件
+            $('#form_login').submit(function (e) {
+                // 阻止默认提交行为
+                e.preventDefault()
+                $.ajax({
+                    url: 'http://127.0.0.1:3007/api/login',
+                    method: 'POST',
+                    // 快速获取表单中的数据
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        if (res.status !== 0) {
+                            alert('登录失败！账号或密码错误')
+                        }
+                        else {
+                            alert('登录成功！')
+                            console.log("1")
+                            // 将登录成功得到的 token 字符串，保存到 localStorage 中
+                            localStorage.setItem('token', res.token)
+                            // 跳转到后台主页
+                            location.href = '/index.html'
+                        }
+                    }
+                })
+            })
+            $('#form_register').submit(function (e) {
+                // 阻止默认提交行为
+                e.preventDefault()
+                $.ajax({
+                    url: 'http://127.0.0.1:3007/api/register',
+                    method: 'POST',
+                    // 快速获取表单中的数据
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        if (res.status !== 0) {
+                            alert('注册失败！')
+                        }
+                        else {
+                            alert('注册成功！')
+                            // 将登录成功得到的 token 字符串，保存到 localStorage 中
+                            localStorage.setItem('token', res.token)
+                            // 跳转到后台主页
+                            location.href = '/login.html'
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

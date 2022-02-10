@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>movie</title>
+    <link rel="stylesheet" href="./js/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/movie.css">
+    <script src="./js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="top_movie">
+        <div class="top_movie_left">
+            <img src="./img/Hands - Camera.png"/>
+        </div>
+        <div class="top_movie_right">
+            <ul>
+                <li>Project</li>
+                <li>Service</li>
+                <li>About</li>
+                <li>Contact</li>
+            </ul>
+        </div>
+    </div>
+    <div class="aside_movie">
+        <img style="width: 100px;" src="./img/Hands - Show.png"/>
+    </div>
+    
+    <div class="main_movie">
+        <div class="first_screen">
+            <div class="video_box">
+                <video src="./video/mixkit-old-film-projector-working-28422-small.mp4"  autoplay="autoplay" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" muted=""></video>
+            </div>
+            <div class="video_box">
+                <video src="./video/mixkit-close-up-of-vintage-movie-film-28417-small.mp4" autoplay="autoplay" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" muted=""></video>
+            </div>
+            <div class="video_box">
+                <video src="./video/mixkit-turning-on-a-vintage-film-projector-28421-small.mp4" autoplay="autoplay" loop="loop" x-webkit-airplay="true" webkit-playsinline="true" muted=""></video>
+            </div>
+        </div>
+        <div class="second_screen">
+            <div class="xiai1">
+                <img src="./img/Miroodles - Sticker (1).png"/>
+            </div>
+            
+            <!-- <div class="xiai2">
+                <img src="./img/pexels-ian-lavrinovich-9056836.jpg">
+                <img src="./img/pexels-ryan-hiebendahl-9576611.jpg">
+            </div> -->
+            <!-- <div class="xiai3">
+                <img src="./img/Miroodles - Sticker.png">
+            </div> -->
+        </div>
+        <!-- <div class="card">
+            <div class="imgBx">
+                <img src="./img/1603701754760-c50d8a.jpg" />
+                <h4>💘</h4>
+            </div>
+            <div class="content">
+                <h4>肖申克的救赎</h4>
+                <p>20世纪40年代末，小有成就的青年银行家安迪（蒂姆·罗宾斯 Tim Robbins
+                    饰）因涉嫌杀害妻子及她的情人而锒铛入狱。在这座名为鲨堡的监狱内，希望似乎虚无缥缈，终身监禁的惩罚无疑注定了安迪接下来...
+                </p>
+            </div>
+        </div> -->
+    </div>
+    <div class="third_screen">
+        <!-- <div class="xiai1">
+            <img src="./img/Miroodles - Sticker (1).png" />
+        </div>
+    
+        <div class="xiai2">
+            <img style="width:300px;" src="./img/pexels-ian-lavrinovich-9056836.jpg">
+            <img style="width:300px;" src="./img/pexels-ryan-hiebendahl-9576611.jpg">
+        </div> -->
+        <div class="xiai3">
+            <img src="./img/Miroodles - Sticker.png">
+        </div>
+    </div>
+    <script type="text/javascript">
+        // $(document).ready(function() {
+        //     var video = document.getElementsByTagName('video'); 
+        //     video.play();
+        //     document.getElementsByClassName('first_srceen').css('background-color', 'red');
+        // })
+        // $('.first_srceen').onmouseover(function() {
+        //     var video = document.getElementsByTagName('video');
+        //     video.play();
+        //     document.getElementsByClassName('first_srceen').css('background-color', 'red');
+        // })
+        $.ajax({
+            url: "https://api.wmdb.tv/api/v1/top?type=Imdb&skip=0&limit=40&lang=Cn",
+            type: "get",
+            dataType: "json",
+            async: true,
+        }).done(function (msg) {
+            console.log(JSON.stringify(msg))
+            var group = msg[0].data;
+            console.table(group);
+            //拼接字符串
+            var str = '';
+            $.each(msg, function (i, obj) {
+                console.log(obj.data[0].dateReleased)
+                str += '<div class="card">' +
+                    '<div class="imgBx">' +
+                    '<img src="' + obj.data[0].poster + '"</img>' +
+                    '</div >' +
+                    '<h4 class="hh4">💘' + obj.doubanRating + '👩‍⚖️' + obj.doubanVotes + '🌘' + obj.data[0].country + '</h4>' +
+                    '<div class="content">' +
+                    '<h4>' + obj.data[0].name + '</h4>' +
+                    '<p>' + obj.data[0].description + '</p>' +
+                    '<h5>🕐' + obj.dateReleased +'</h5>' +
+                    '</div>' +
+                    '</div>';
+
+                // str += '<tr>';
+                // str += '<td>' + (i + 1) + '</td>';
+                // str += '<td>' + obj.data[0].name + '</td>';
+                // str += '<td>' + obj.doubanRating + '</td>';
+                // str += '<td>' + obj.data[0].description + '</td>';
+                // str += '<td>' + obj.dateReleased + '</td>';
+                // str += '<td>' + obj.data[0].country + '</td>';
+                // str += '<td>' + obj.data[0].genre + '</td>';
+                // str += '<td><img src="' + obj.data[0].poster + '"</img></td>';
+                // str += '</tr>';
+            });
+            $(".main_movie").append(str);
+        }).fail(function (e) {
+            alert("request failed !")
+        })
+    </script>
+
+</body>
+
+</html>

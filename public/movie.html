@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>movie</title>
+    <link rel="stylesheet" href="./js/bootstrap.min.css">
+    <script src="./js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./js/bootstrap.min.js"></script>
+</head>
+<style>
+    body,
+    html {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+    }
+    img{
+        width: 100px;height: 100px;
+    }
+
+</style>
+<body>
+    <section class="counts section-bg">
+        <div class="container">
+            <table class="table table-striped">
+                <tr>
+                    <td>排名</td>
+                    <td>电影中文名称</td>
+                    <td>评分</td>
+                    <td>评价人数</td>
+                    <td>一句话概述</td>
+                    <td>上映时间</td>
+                    <td>地区</td>
+                    <td>分类</td>
+                    <td>图片</td>
+                </tr>
+                <tr>
+                    <!-- <td>{{movie[0]}}</td>
+                            <td>
+                                <a href="{{ movie[1] }}" target="_blank">
+                                    {{ movie[3] }}
+                                </a>
+                            </td>
+                            <td>{{movie[4]}}</td>
+                            <td>{{movie[5]}}</td>
+                            <td>{{movie[6]}}</td>
+                            <td>{{movie[7]}}</td>
+                            <td>{{movie[8]}}</td>
+                            <td>{{movie[9]}}</td> -->
+                </tr>
+            </table>
+        </div>
+    </section>
+    <script type="text/javascript">
+        
+        $.ajax({
+            url: "https://api.wmdb.tv/api/v1/top?type=Imdb&skip=0&limit=250&lang=Cn",
+            type: "get",
+            dataType: "json",
+            async: true,
+        }).done(function (msg) {
+            console.log(JSON.stringify(msg))
+            var group = msg[0].data;
+            console.table(group);
+            //拼接字符串
+            var str = '';
+            $.each(msg, function (i, obj) {
+                console.log(obj.data[0].dateReleased)
+                str += '<tr>';
+                str += '<td>' + (i + 1) + '</td>';
+                str += '<td>' + obj.data[0].name + '</td>';
+                str += '<td>' + obj.doubanRating + '</td>';
+                str += '<td>' + obj.doubanVotes + '</td>';
+                str += '<td>' + obj.data[0].description + '</td>';
+                str += '<td>' + obj.dateReleased + '</td>';
+                str += '<td>' + obj.data[0].country + '</td>';
+                str += '<td>' + obj.data[0].genre + '</td>';
+                str += '<td><img src="' + obj.data[0].poster + '"</img></td>'; 
+                str += '</tr>';
+            });
+            $(".table").append(str);
+        }).fail(function (e) {
+            alert("request failed !")
+        })
+    </script>
+
+</body>
+
+</html>
